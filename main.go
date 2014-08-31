@@ -13,7 +13,7 @@ import (
 
 var directory string
 
-var mapData = map[string]uint32{}
+var mapData = map[string]map[string]uint32{}
 
 func exportTileset(fh *os.File) (uint32, error) {
 	headerBuf := make([]byte, 2)
@@ -78,7 +78,11 @@ func exportTileset(fh *os.File) (uint32, error) {
 }
 
 func addTile(tileId, x, y uint32) {
-	mapData[strconv.Itoa(int(x)) + "-" + strconv.Itoa(int(y))] = tileId
+	if _, ok := mapData[strconv.Itoa(int(x))]; !ok {
+		mapData[strconv.Itoa(int(x))] = map[string]uint32{}
+	}
+
+	mapData[strconv.Itoa(int(x))][strconv.Itoa(int(y))] = tileId
 }
 
 func main() {
